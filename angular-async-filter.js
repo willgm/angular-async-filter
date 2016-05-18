@@ -1,14 +1,15 @@
 (function (angular, undefined) {
   angular.module('async', []).filter('async', function () {
     var promiseValues = new WeakMap()
-    return function (promise) {
+    return function (promise, loadingMessage) {
       if (!promiseValues.has(promise)) {
         promiseValues.set(promise, undefined)
         promise.then(function (value) {
           promiseValues.set(promise, value)
         })
+        return loadingMessage;
       } else {
-        return promiseValues.get(promise)
+        return promiseValues.get(promise) || loadingMessage
       }
     }
   })
